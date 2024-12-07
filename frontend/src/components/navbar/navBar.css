@@ -1,0 +1,34 @@
+.alcombank__navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 2rem 6rem;
+}
+
+.alcombank__navbar-links {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alcombank__navbar-links_logo {
+    margin-right: 2rem;
+}
+
+.alcombank__navbar-links_container {
+    display: flex;
+}
+
+.alcombank__navbar-links_container p {
+    color: #fff;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 25px;
+    text-transform: capitalize;
+
+    margin: 0 1rem;
+    cursor: pointer;
+}
