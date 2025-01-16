@@ -1,5 +1,11 @@
 package com.alcombank.repositories;
 
-public interface AccountRepository extends JpaRepository<Integer, Account> {
-    
+import com.alcombank.models.Account;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface AccountRepository extends JpaRepository<Account, Integer> {
+    Optional<Account> findByCardNumber(String cardNumber);
 }
