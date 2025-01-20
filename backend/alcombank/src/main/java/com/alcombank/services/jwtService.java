@@ -4,6 +4,8 @@ import com.alcombank.models.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class jwtService {
+public class JwtService {
 
-    private final String SECRET_KEY = "your_secret_key";
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("your_secret_key_your_secret_key_your_secret".getBytes());
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
@@ -25,8 +27,8 @@ public class jwtService {
                 .setClaims(claims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 1)) // Token valid for 10 hours
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 1)) // Token valid for 1 hour
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 }

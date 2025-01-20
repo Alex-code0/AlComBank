@@ -5,7 +5,7 @@ const ProtectedRoutes = ({ children }) => {
   if (localStorage.getItem("accountData")) {
     return children
   } else {
-    <Navigate to="/login" />
+    return <Navigate to="/login" />
   }
 };
 

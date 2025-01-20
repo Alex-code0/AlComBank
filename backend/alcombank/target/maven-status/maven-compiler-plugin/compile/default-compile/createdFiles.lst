@@ -1,10 +1,8 @@
-com\alcombank\services\AccountService.class
 com\alcombank\controllers\AuthController.class
 com\alcombank\configurations\WebConfig.class
 com\alcombank\models\User.class
 com\alcombank\repositories\AccountRepository.class
 com\alcombank\configurations\DatabaseConfig.class
-com\alcombank\services\UserService.class
 com\alcombank\models\Account.class
 com\alcombank\services\JwtService.class
 com\alcombank\App.class

@@ -19,7 +19,7 @@ const LogIn = ({ onLogin }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
-      });
+      })
       
       const data = await response.json()
 
@@ -34,25 +34,35 @@ const LogIn = ({ onLogin }) => {
     } catch (error) {
       console.error("Error:", error)
     }
-  };
+  }
 
   return (
     <div className="login">
       <span>Log in</span>
       <form onSubmit={handleSubmit}>
         <div className="input">
-          <img src="" alt="" />
-          <input type="text" placeholder="Email" value={email} onChange={handleEmailChange} />
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmailChange}
+            required
+          />
         </div>
         <div className="input">
-          <img src="" alt="" />
-          <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+          />
         </div>
         <button type="submit">Log in</button>
-        <Link to="/register">Register</Link>
+        <Link to="/register">Don't have an account? Register</Link>
       </form>
     </div>
-  );
-};
+  )
+}
 
 export default LogIn

@@ -4,17 +4,19 @@ import com.alcombank.models.User;
 import com.alcombank.models.Account;
 import com.alcombank.repositories.UserRepository;
 import com.alcombank.repositories.AccountRepository;
-import com.alcombank.services.jwtService;
+import com.alcombank.services.JwtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -27,32 +29,34 @@ public class AuthController {
     private AccountRepository accountRepository;
 
     @Autowired
-    private jwtService jwtService;
+    private JwtService jwtService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail()).orElse(null);
+        Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
 
-        if (user == null) {
-            return ResponseEntity.status(404).body("User not found");
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
+        User user = userOptional.get();
+
+        // Assuming passwords are hashed
         if (!user.getPassword().equals(loginRequest.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
         Account account = user.getAccount();
         if (account == null) {
-            return ResponseEntity.status(404).body("Account not found for the user");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found for the user");
         }
 
-        // Generate JWT token
         String jwtToken = jwtService.generateToken(user);
 
-        // Prepare response
         Map<String, Object> response = new HashMap<>();
-        response.put("accountData", account);
-        response.put("jwtToken", jwtToken);
+        response.put("user", user.getName());
+        response.put("token", jwtToken);
+        response.put("account", account);
 
         return ResponseEntity.ok(response);
     }
@@ -60,23 +64,22 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody User signupRequest) {
         if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
-            return ResponseEntity.status(409).body("Email already in use");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
         }
 
         User newUser = new User();
         newUser.setName(signupRequest.getName());
         newUser.setEmail(signupRequest.getEmail());
+        // Use a secure hashing library for password storage
         newUser.setPassword(signupRequest.getPassword());
 
         Account newAccount = new Account();
         newAccount.setBalance(0.0f);
-        newAccount.setCardNumber(null);
-        newAccount.setCardExpireDate(null);
-
         accountRepository.save(newAccount);
+
         newUser.setAccount(newAccount);
         userRepository.save(newUser);
 
-        return ResponseEntity.ok("Signup successful");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Signup successful");
     }
 }

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './navBar.css'
 
 const NavBar = ({ user }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [localUser, setLocalUser] = useState(user)
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen)
 
@@ -13,9 +14,21 @@ const NavBar = ({ user }) => {
     localStorage.removeItem("userData")
     localStorage.removeItem("accountData")
     localStorage.removeItem("authToken")
+    setLocalUser(null)
     navigate("/")
     window.location.reload()
-  };
+  }
+
+  window.handleLogout = handleLogout
+
+  useEffect(() => {
+    if (!localUser) {
+      const storedUser = JSON.parse(localStorage.getItem('userData'))
+      if (storedUser) {
+        setLocalUser(storedUser)
+      }
+    }
+  }, [localUser])
 
   return (
     <div className="alcombank__navbar">
@@ -29,9 +42,9 @@ const NavBar = ({ user }) => {
           <p><a href="#home">Despre bancă</a></p>
         </div>
       </div>
-      {user ? (
+      {localUser ? (
         <div className="alcombank__navbar-logedin">
-          <p onClick={toggleDropdown}>Welcome, {user.name}</p>
+          <p onClick={toggleDropdown}>Welcome, {localUser}</p>
           {dropdownOpen && (
             <ul>
               <li>
@@ -50,7 +63,7 @@ const NavBar = ({ user }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 export default NavBar
