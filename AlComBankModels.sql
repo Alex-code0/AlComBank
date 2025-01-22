@@ -3,11 +3,20 @@ GO
 USE AlComBank
 GO
 
+CREATE TABLE Credit (
+	IdCredit INT PRIMARY KEY IDENTITY(1, 1),
+	SumaCredit INT NOT NULL,
+	PerioadaCreditare INT NOT NULL,
+	RataAnualaCredit INT NOT NULL,
+	DataAcreditarii DATE
+)
+
 CREATE TABLE Account (
 	AccountId INT PRIMARY KEY IDENTITY(1, 1),
 	Balance FLOAT NOT NULL DEFAULT(0),
 	CardNumber CHAR(16),
-	CardExpireDate CHAR(4)
+	CardExpireDate CHAR(4),
+	IdCredit INT FOREIGN KEY(IdCredit) REFERENCES Credit(IdCredit)
 )
 
 CREATE TABLE User_ (

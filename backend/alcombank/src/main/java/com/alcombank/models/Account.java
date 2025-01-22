@@ -1,5 +1,7 @@
 package com.alcombank.models;
 
+import com.alcombank.models.Credit;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,15 +32,22 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private User user;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "IdCredit", referencedColumnName = "IdCredit")
+    private Credit credit;
+
+
     //Getters
     public Integer getAccountId() { return accountId; }
     public Float getBalance() { return balance; }
     public String getCardNumber() { return cardNumber; }
     public String getCardExpireDate() { return cardExpireDate; }
+    public Credit getCredit() { return credit; }
 
     //Setters
     public void setAccountId(Integer accountId) { this.accountId = accountId; }
     public void setBalance(Float balance) { this.balance = balance; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
     public void setCardExpireDate(String cardExpireDate) { this.cardExpireDate = cardExpireDate; }
+    public void setCredit(Credit credit) { this.credit = credit; }
 }

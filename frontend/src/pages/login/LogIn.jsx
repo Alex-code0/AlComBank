@@ -11,30 +11,35 @@ const LogIn = ({ onLogin }) => {
   const handlePasswordChange = (e) => setPassword(e.target.value)
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const userData = { email, password }
-
+    e.preventDefault();
+    const userData = { email, password };
+  
     try {
       const response = await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
-      })
-      
-      const data = await response.json()
-
+      });
+  
+      const data = await response.json();
+  
       if (response.ok) {
-        localStorage.setItem("authToken", data.token)
-        localStorage.setItem("accountData", JSON.stringify(data.account))
-        onLogin(data.user)
-        navigate("/")
+        const token = data.token;
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const expiryTime = decodedToken.exp * 1000;
+  
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("tokenExpiry", expiryTime);
+        localStorage.setItem("accountData", JSON.stringify(data.account));
+        onLogin(data.user);
+        navigate("/");
       } else {
-        console.error("Login failed:", data.message)
+        console.error("Login failed:", data.message);
       }
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error:", error);
     }
-  }
+  };  
 
   return (
     <div className="login">
@@ -42,7 +47,7 @@ const LogIn = ({ onLogin }) => {
       <form onSubmit={handleSubmit}>
         <div className="input">
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             value={email}
             onChange={handleEmailChange}

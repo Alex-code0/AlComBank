@@ -80,6 +80,6 @@ public class AuthController {
         newUser.setAccount(newAccount);
         userRepository.save(newUser);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Signup successful");
+        return ResponseEntity.ok("Registration succesfull");
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './register.css'
 
 const Register = () => {
@@ -6,6 +7,7 @@ const Register = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const navigate = useNavigate()
 
   const handleNameChange = (e) => setName(e.target.value)
   const handleEmailChange = (e) => setEmail(e.target.value)
@@ -25,10 +27,11 @@ const Register = () => {
         body: JSON.stringify(userData)
       })
 
-      const data = await response.json()
+      const data = await response.text()
       
       if(response.ok) {
-        console.log("Registration succesful: ", data)
+        alert("Registration succesfull")
+        navigate("/login")
       } else {
         console.error("Registration failed: ", data.message)
       }
@@ -42,9 +45,24 @@ const Register = () => {
       <div className="register__header-container">
         <h1>Register</h1>
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder='Name' value={name} onChange={handleNameChange}/>
-          <input type="text" placeholder='Email' value={email} onChange={handleEmailChange}/>
-          <input type="password" placeholder='Password' value={password} onChange={handlePasswordChange}/>
+          <input
+            type="text"
+            placeholder='Name'
+            value={name}
+            onChange={handleNameChange}
+          />
+          <input
+            type="email"
+            placeholder='Email'
+            value={email}
+            onChange={handleEmailChange}
+          />
+          <input
+            type="password"
+            placeholder='Password'
+            value={password}
+            onChange={handlePasswordChange}
+          />
           <button type="submit">Register</button>
         </form>
       </div>
