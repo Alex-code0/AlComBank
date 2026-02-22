@@ -1,0 +1,20 @@
+.navbar {
+    
+}
+
+.navbar_buttons {
+    display: flex;
+}
+
+.navbar_buttons-logo img {
+    max-width: 4rem;
+    max-height: 4rem;
+}
+
+.navbar_buttons-container {
+    
+}
+
+.navbar_links {
+    display: flex;
+}

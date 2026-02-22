@@ -5,8 +5,8 @@ import { Home } from './pages';
 
 const App = () => {
   return (
-    <div>
-      
+    <div className="App">
+      <Home />
     </div>
   )
 }
